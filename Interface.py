@@ -31,34 +31,30 @@ def decrypt_message():
 
     result_label.config(text=f"Mensagem Descriptografada: {frase}")
 
-def configura_interface():
 # Configurar janela principal
-    root = tk.Tk()
-    root.title("Criptografia Simples")
-    
-    # Campo para a senha
-    tk.Label(root, text="Senha:").grid(row=0, column=0, padx=10, pady=10)
-    password_entry = tk.Entry(root, show="*")
-    password_entry.grid(row=0, column=1, padx=10, pady=10)
-    
-    # Campo para a mensagem
-    tk.Label(root, text="Mensagem:").grid(row=1, column=0, padx=10, pady=10)
-    message_entry = tk.Entry(root, width=40)
-    message_entry.grid(row=1, column=1, padx=10, pady=10)
-    
-    # Botões de Cript e Uncript
-    encrypt_button = tk.Button(root, text="Cript", command=encrypt_message)
-    encrypt_button.grid(row=2, column=0, padx=10, pady=10)
-    
-    decrypt_button = tk.Button(root, text="Uncript", command=decrypt_message)
-    decrypt_button.grid(row=2, column=1, padx=10, pady=10)
-    
-    # Rótulo para exibir o resultado
-    result_label = tk.Label(root, text="Resultado aparecerá aqui", wraplength=400)
-    result_label.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
+root = tk.Tk()
+root.title("Criptografia Simples")
 
-    return root
+# Campo para a senha
+tk.Label(root, text="Senha:").grid(row=0, column=0, padx=10, pady=10)
+password_entry = tk.Entry(root, show="*")
+password_entry.grid(row=0, column=1, padx=10, pady=10)
 
-def executa():
-    root = configura_interface()
-    root.mainloop()
+# Campo para a mensagem
+tk.Label(root, text="Mensagem:").grid(row=1, column=0, padx=10, pady=10)
+message_entry = tk.Entry(root, width=40)
+message_entry.grid(row=1, column=1, padx=10, pady=10)
+
+# Botões de Cript e Uncript
+encrypt_button = tk.Button(root, text="Cript", command=encrypt_message)
+encrypt_button.grid(row=2, column=0, padx=10, pady=10)
+
+decrypt_button = tk.Button(root, text="Uncript", command=decrypt_message)
+decrypt_button.grid(row=2, column=1, padx=10, pady=10)
+
+# Rótulo para exibir o resultado
+result_label = tk.Label(root, text="Resultado aparecerá aqui", wraplength=400)
+result_label.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
+
+# Iniciar o loop da interface gráfica
+root.mainloop()
