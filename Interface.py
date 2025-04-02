@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from KeyManipulation import cript, decript
+import pyperclip
 
 def encrypt_message():
     password = password_entry.get()
@@ -11,6 +12,8 @@ def encrypt_message():
         return
     
     resultado = cript(message, password)
+
+    pyperclip.copy(resultado)
 
     result_label.config(text=f"Mensagem Criptografada: {resultado}")
 
@@ -28,6 +31,8 @@ def decrypt_message():
 
     for i in decrypted:
         frase += chr(int(i))
+
+    pyperclip.copy(frase)
 
     result_label.config(text=f"Mensagem Descriptografada: {frase}")
 
