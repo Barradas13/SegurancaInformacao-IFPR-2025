@@ -2,6 +2,8 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 
+import os
+
 def decrypt_aes(key: bytes, iv: bytes, ciphertext: bytes) -> bytes:
     """
     Descriptografa o texto cifrado usando AES no modo CBC.
@@ -32,6 +34,7 @@ def decrypt_aes(key: bytes, iv: bytes, ciphertext: bytes) -> bytes:
 
 def decriptador(chave, arquivo):
     with open(arquivo, "rb") as f:
+
         header = f.read(32)
         
         ident      = header[0:2]        # 2 bytes
@@ -41,11 +44,15 @@ def decriptador(chave, arquivo):
         iv         = header[5:21]       # 16 bytes
         reserved = header[21:32]      # 11 bytes 
         
-        ciphered = f.read()[32:]
-        
+        ciphered = f.read()
+
+        print(ciphered)
+
         plainText = decrypt_aes(chave, iv, ciphered)
         
-        with open("decriptado" + arquivo + ".dec", "wb") as f:
+        arquivo_nome = os.path.basename(arquivo).split(".")[0]
+
+        with open("decriptado" + arquivo_nome + ".dec", "wb") as f:
             f.write(plainText)
             
         

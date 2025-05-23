@@ -2,6 +2,8 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 
+import os
+
 def encrypt_aes(key: bytes, iv: bytes, plaintext: bytes) -> bytes:
     """
     Criptografa o texto usando AES no modo CBC.
@@ -53,10 +55,12 @@ def cria_arquivo(version, iv, cipher_text, arquivo_nome):
 
 
 def encripta_arquivo(arquivo, chave, iv):
-    with open(arquivo, "rb") as arquivo:
-        
-        ciphered = encrypt_aes(chave, iv, arquivo.read)
-        cria_arquivo([0x01], iv, ciphered, "encriptado" + arquivo)
+    with open(arquivo, "rb") as f:
+
+        arquivo_nome = os.path.basename(arquivo).split(".")[0]
+
+        ciphered = encrypt_aes(chave, iv, f.read())
+        cria_arquivo([0x01], iv, ciphered, arquivo_nome + "encriptado")
         
         
         
