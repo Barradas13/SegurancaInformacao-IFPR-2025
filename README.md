@@ -1,24 +1,8 @@
 # README - Projeto de Criptografia AES
 
-## Sobre Criptografia Clássica
+## Sobre o Repositório
 
-A criptografia clássica refere-se aos métodos de cifragem utilizados antes da era digital, incluindo:
-
-- **Cifras de substituição**: Cada letra do texto é substituída por outra (ex: Cifra de César)
-- **Cifras de transposição**: As letras são reorganizadas seguindo um padrão
-- **Máquinas de criptografia**: Como a famosa Enigma usada na Segunda Guerra Mundial
-
-Estes métodos foram a base para o desenvolvimento da criptografia moderna, mas possuem vulnerabilidades conhecidas e não são mais considerados seguros para proteção de dados digitais.
-
-## Sobre o AES (Advanced Encryption Standard)
-
-O AES é um padrão de criptografia simétrica adotado pelo governo dos EUA em 2001 e amplamente utilizado mundialmente:
-
-- **Tipo**: Criptografia simétrica (mesma chave para cifrar e decifrar)
-- **Tamanhos de chave**: 128, 192 ou 256 bits
-- **Blocos**: Trabalha com blocos de 128 bits (16 bytes)
-- **Modos de operação**: ECB, CBC, CTR, etc. (nosso projeto usa CBC)
-- **Segurança**: Considerado extremamente seguro quando implementado corretamente
+Repositório para armazenar projetos e materiais da matéria de Segurança da Informação tida em 2025 no Instituto Federal do Paraná com o professor Thiago Berticelli Lo
 
 ## Sobre Este Projeto
 
