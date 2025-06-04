@@ -27,5 +27,5 @@ def verificar_integridade(arquivo_original: str, arquivo_metadata: str, chave: b
     ciphertext = encrypt_aes(chave, iv, conteudo)
     fingerprint_atual = ciphertext[-16:]
 
-
+    print(fingerprint_original == fingerprint_atual)
     return fingerprint_original == fingerprint_atual
