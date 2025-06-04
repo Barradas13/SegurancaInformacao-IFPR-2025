@@ -68,7 +68,7 @@ def criarPagina(iv):
         def botao_decripta(e):
             try:
                 chave = campo_chave.value.encode("utf-8")
-                decriptador(chave, iv)
+                decriptador(chave, selected_path["path"])
                 dialog_sucess.open = True
                 page.dialog = dialog_sucess
                 page.update()
