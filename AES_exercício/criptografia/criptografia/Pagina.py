@@ -1,60 +1,36 @@
 import flet as ft
-from Encriptador import encripta_arquivo
-from Decriptador import decriptador
-from gerar_metadata import gerar_metadata
-from verificar_integridade import verificar_integridade
+from .Encriptador import encripta_arquivo
+from .Decriptador import decriptador
+from .gerar_metadata import gerar_metadata
+from .verificar_integridade import verificar_integridade
 import os
 
 def criarPagina(iv):
     def main(page: ft.Page):
-        page.title = "Flet File Picker com Texto Dinâmico"
+        page.title = "Encriptador"
         page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
         selected_files_text = ft.Text("Nenhum arquivo selecionado", size=16)
 
         campo_chave = ft.TextField(label="Digite a chave de 16 bytes", hint_text="Ex: Olá mundo!", password=True)
 
-        # Diálogo de sucesso
-        def fechar_dialogo_sucesso(e):
-            dialog_sucess.open = False
-            page.update()
 
         dialog_sucess = ft.AlertDialog(
             title=ft.Text("Sucesso!"),
             content=ft.Text("Ação realizada com sucesso."),
-            actions=[ft.TextButton("OK", on_click=fechar_dialogo_sucesso)],
+            actions=[ft.TextButton("OK", on_click=lambda e: page.close(dialog_sucess))],
         )
-
-        # Diálogo de erro
-        def fechar_dialogo_insucesso(e):
-            dialog_insucesso.open = False
-            page.update()
 
         dialog_insucesso = ft.AlertDialog(
             title=ft.Text("Erro!"),
             content=ft.Text("Algo deu errado. Verifique a chave e tente novamente."),
-            actions=[ft.TextButton("OK", on_click=fechar_dialogo_insucesso)],
+            actions=[ft.TextButton("OK", on_click=lambda e: page.close(dialog_insucesso))],
         )
-
-        def fechar_dialogo_token(e):
-            dialog_token.open = False
-            page.update()
-
-        dialog_token = ft.AlertDialog(
-            title=ft.Text("Token Criado"),
-            content=ft.Text("Arquivo de metadados (.meta) gerado com sucesso."),
-            actions=[ft.TextButton("OK", on_click=fechar_dialogo_token)],
-        )
-
-        # Diálogo para verificação
-        def fechar_dialogo_verificacao(e):
-            dialog_verificacao.open = False
-            page.update()
 
         dialog_verificacao = ft.AlertDialog(
             title=ft.Text("Resultado da Verificação"),
             content=ft.Text(),  # Será preenchido dinamicamente
-            actions=[ft.TextButton("OK", on_click=fechar_dialogo_verificacao)],
+            actions=[ft.TextButton("OK", on_click=lambda e: page.close(dialog_verificacao))],
         )
 
         # Resultado da seleção de arquivos
@@ -64,7 +40,7 @@ def criarPagina(iv):
             if e.files:
                 file_names = ", ".join([f.name for f in e.files])
                 selected_files_text.value = f"Arquivos selecionados: {file_names}"
-                selected_path["path"] = e.files[0].path
+                selected_path["path"] = e.files
             else:
                 selected_files_text.value = "Nenhum arquivo selecionado"
                 selected_path["path"] = None
@@ -75,85 +51,107 @@ def criarPagina(iv):
 
         # Botões
         def botao_encripta(e):
+            
+            print("Lozao")
+            print(selected_path, "selecte")
+            
+            print(os.path.abspath(selected_path["path"][0].name), "nome")
+
             try:
-                if not selected_path["path"]:
+                caminho_arquivo = selected_path["path"][0].path
+            except:
+                caminho_arquivo = ""
+
+            try:
+                if not caminho_arquivo:
                     raise ValueError("Nenhum arquivo selecionado.")
                 chave = campo_chave.value.encode("utf-8")
-                encripta_arquivo(selected_path["path"], chave, iv)
-                dialog_sucess.open = True
-                page.dialog = dialog_sucess
-                page.update()
+                enc_file = encripta_arquivo(caminho_arquivo, chave, iv)
+                dialog_sucess.content = ft.Text(f"Ação realizada com sucesso. Arquivo criado em: ${os.path.abspath(enc_file)}")
+
+                page.open(dialog_sucess)
+
             except Exception as ex:
                 print("Erro:", ex)
-                dialog_insucesso.open = True
-                page.dialog = dialog_insucesso
-                page.update()
+                page.open(dialog_insucesso)
 
         def botao_decripta(e):
+
+            try:
+                caminho_arquivo = selected_path["path"][0].path
+            except:
+                caminho_arquivo = ""
+
             try:
                 chave = campo_chave.value.encode("utf-8")
-                decriptador(chave, selected_path["path"])
-                dialog_sucess.open = True
-                page.dialog = dialog_sucess
-                page.update()
+                
+                decrip_file = decriptador(chave, caminho_arquivo)
+            
+                dialog_sucess.content = ft.Text(f"Ação realizada com sucesso. Arquivo criado em: ${os.path.abspath(decrip_file)}")
+                
+
+                page.open(dialog_sucess)
+
             except Exception as ex:
                 print("Erro:", ex)
-                dialog_insucesso.open = True
-                page.dialog = dialog_insucesso
-                page.update()
+
+                page.open(dialog_insucesso)
 
         def botao_criar_token(e):
+
+            try:
+                caminho_arquivo = selected_path["path"][0].path
+            except:
+                caminho_arquivo = ""
+
             try:
                 if not selected_path["path"]:
                     raise ValueError("Nenhum arquivo selecionado.")
 
                 chave = campo_chave.value.encode("utf-8")
+                meta_file = gerar_metadata(caminho_arquivo, chave)
 
-                # Reutilizando a função gerar_metadata que já criamos
-                meta_file = gerar_metadata(selected_path["path"], chave)
 
-                dialog_token.content = ft.Text(f"Arquivo de metadados criado: {meta_file}")
-                dialog_token.open = True
-                page.dialog = dialog_token
-                page.update()
+                dialog_sucess.content = ft.Text(f"Ação realizada com sucesso. Arquivo criado em: ${os.path.abspath(meta_file)}")
+
+                page.open(dialog_sucess)
 
             except Exception as ex:
                 print("Erro:", ex)
-                dialog_insucesso.content = ft.Text(f"Erro ao criar token: {str(ex)}")
-                dialog_insucesso.open = True
-                page.dialog = dialog_insucesso
-                page.update()
+                page.open(dialog_insucesso)
 
         def botao_verificar_veracidade(e):
+
             try:
-                if not selected_path["path"]:
+                caminho_arquivo = selected_path["path"][0].path
+                caminho_meta = selected_path["path"][1].path
+            except:
+                caminho_arquivo = ""
+                caminho_meta = ""
+
+
+            try:
+                if not caminho_arquivo or not caminho_meta:
                     raise ValueError("Nenhum arquivo selecionado.")
 
                 chave = campo_chave.value.encode("utf-8")
 
-                base_name = os.path.basename(selected_path["path"])
-                meta_file = os.path.splitext(base_name)[0] + ".meta"
-
-                resultado = verificar_integridade(selected_path["path"], meta_file, chave)
+                resultado = verificar_integridade(caminho_arquivo, caminho_meta, chave)
 
                 if resultado:
                     dialog_verificacao.content = ft.Text("O arquivo está íntegro e não foi modificado.")
                 else:
                     dialog_verificacao.content = ft.Text("ATENÇÃO: O arquivo foi modificado ou está corrompido!")
 
-                dialog_verificacao.open = True
-                page.dialog = dialog_verificacao
-                page.update()
+                page.open(dialog_verificacao)
 
             except Exception as ex:
                 print("Erro:", ex)
                 dialog_insucesso.content = ft.Text(f"Erro na verificação: {str(ex)}")
-                dialog_insucesso.open = True
-                page.dialog = dialog_insucesso
-                page.update()
+                page.open(dialog_insucesso)
         page.add(
             campo_chave,
-            ft.ElevatedButton("Escolher arquivos...", on_click=lambda _: file_picker.pick_files(allow_multiple=False)),
+            ft.ElevatedButton("Escolher para decriptar, encriptar, gerar meta, ou verificar", on_click=lambda _: file_picker.pick_files(allow_multiple=True)),
             selected_files_text,
             ft.ElevatedButton("Encriptar", on_click=botao_encripta),
             ft.ElevatedButton("Decriptar", on_click=botao_decripta),
@@ -161,4 +159,6 @@ def criarPagina(iv):
             ft.ElevatedButton("Verificar Veracidade", on_click=botao_verificar_veracidade),
         )
 
-    ft.app(target=main)
+    print("Rodando ft.app com Flet em: http://0.0.0.0:8550")
+    ft.app(target=main, view=ft.WEB_BROWSER, port=8550, host="0.0.0.0")
+

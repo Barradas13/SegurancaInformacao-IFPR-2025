@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  cripto:
+    image: barradas13/cripto
+    container_name: cripto
+    ports:
+      - "8580:8550" 
+    network_mode: host
+    stdin_open: true
+    tty: true
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower 
+    volumes: 
+    - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+    - WATCHTOWER_POLL_INTERVAL=15 
+    command: cripto

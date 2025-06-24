@@ -1,4 +1,4 @@
-from Encriptador import encrypt_aes
+from .Encriptador import encrypt_aes
 
 def verificar_integridade(arquivo_original: str, arquivo_metadata: str, chave: bytes) -> bool:
     """

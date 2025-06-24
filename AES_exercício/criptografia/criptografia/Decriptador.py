@@ -55,4 +55,4 @@ def decriptador(chave, arquivo):
         with open("decriptado" + arquivo_nome + ".dec", "wb") as f:
             f.write(plainText)
             
-        
+        return "decriptado" + arquivo_nome + ".dec"

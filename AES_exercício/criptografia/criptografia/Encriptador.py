@@ -62,5 +62,5 @@ def encripta_arquivo(arquivo, chave, iv):
         ciphered = encrypt_aes(chave, iv, f.read())
         cria_arquivo([0x01], iv, ciphered, arquivo_nome + "encriptado")
         
-        
+        return arquivo_nome + "encriptado.enc"
         

@@ -1,4 +1,4 @@
-from Encriptador import encrypt_aes
+from .Encriptador import encrypt_aes
 import secrets
 import os
 
